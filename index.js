@@ -24,10 +24,14 @@ const userSchema = new mongoose.Schema({
     password: String,
 });
 
-const UserModel = mongoose.model("users", userSchema)
-app.get("/getUsers", async(req, res) => {
-    const userData = await UserModel.find();
-    res.json(userData);
+const UserModel = mongoose.model("endpoint_logics", userSchema)
+app.get("/getUsers", async (req, res) => {
+    try {
+        const users = await UserModel.find({}, 'name age');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.use(express.json());
